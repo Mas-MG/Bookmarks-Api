@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
-  constructor(config:ConfigService) {
+  constructor(config: ConfigService) {
     super({
       datasources: {
         db: {
@@ -12,5 +12,15 @@ export class PrismaService extends PrismaClient {
         },
       },
     });
+  }
+
+  // Everytime that we restart db the whole tables should be cleaned.
+  // $transactio does this on order (first bookmark, second user,..)
+  // we delete bookmark first because they are related to a user
+  cleanDb() {
+    return this.$transaction([
+      this.bookmark.deleteMany(),
+      this.user.deleteMany(),
+    ]);
   }
 }
