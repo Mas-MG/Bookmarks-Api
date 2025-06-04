@@ -140,7 +140,20 @@ describe('App e2e', () => {
           .spec()
           .get('/bookmarks')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .expectStatus(200).expectJsonLength(1);
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
+    });
+
+    describe('Get bookmark by Id', () => {
+      it('should get bookmark by Id', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks/{id}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('id', '$S{bookmarkId}')
+          .expectStatus(200)
+          .expectJsonMatch({ id: '$S{bookmarkId}' });
       });
     });
   });
