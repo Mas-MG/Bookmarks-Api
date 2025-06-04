@@ -62,4 +62,19 @@ export class BookmarkService {
       },
     });
   }
+
+  async deleteBookmarkById(userId: number, bookmarkId: number) {
+    const bookmark = await this.prisma.bookmark.findFirst({
+      where: {
+        id: bookmarkId,
+        userId,
+      },
+    });
+    if (!bookmark) throw new NotFoundException('Bookmark Not Found!');
+    return await this.prisma.bookmark.delete({
+      where: {
+        id: bookmarkId,
+      },
+    });
+  }
 }

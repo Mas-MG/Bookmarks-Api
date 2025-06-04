@@ -176,5 +176,30 @@ describe('App e2e', () => {
           .expectBodyContains(dto.description);
       });
     });
+
+    describe('Delete bookmark by Id', () => {
+      it('should delete bookmark by Id', () => {
+        return pactum
+          .spec()
+          .delete('/bookmarks/{id}')
+          .withPathParams('id', '$S{bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(204);
+      });
+    });
+
+    describe('Get empty bookmarks', () => {
+      it('should get empty bookmarks', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
+          // .expectBodyContains([]);
+          .expectJsonLength(0)
+      });
+    });
   });
 });

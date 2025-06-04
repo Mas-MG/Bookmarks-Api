@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -46,5 +49,14 @@ export class BookmarkController {
     @Body() dto: EditBookmarkDto,
   ) {
     return await this.bookmarkService.editBookmarkById(userId, bookmarkId, dto);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async deleteBookmarkById(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) bookmarkId: number,
+  ) {
+    return await this.bookmarkService.deleteBookmarkById(userId, bookmarkId);
   }
 }
